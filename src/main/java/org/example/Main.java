@@ -1,17 +1,42 @@
 package org.example;
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+    public static void main(String[] args) {
+        System.out.println("Game character battle system");
+        System.out.println("-------------------------\n");
+        Warrior warrior = new Warrior("Dominic", 100, 20);
+        Mage mage = new Mage("Mage", 80, 25);
+        Archer archer = new Archer("Archer", 90, 15);
+        System.out.println("Starting Characters:");
+        warrior.displayInfo();
+        mage.displayInfo();
+        archer.displayInfo();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        System.out.println("Battle Begins!\n");
+
+        runBattleAction(() -> warrior.attack(mage));
+        System.out.println();
+        runBattleAction(() -> mage.attack(archer));
+        System.out.println();
+
+        runBattleAction(() -> archer.attack(warrior));
+
+        System.out.println("\nUpdated Characters:");
+        warrior.displayInfo();
+        mage.displayInfo();
+        archer.displayInfo();
+
+        System.out.println("Testing Invalid Actions:");
+
+        runBattleAction(() -> new Warrior(" ", 100, 20));
+        runBattleAction(() -> new Mage("Invalid Mage", 0, 25));
+        runBattleAction(() -> warrior.takeDamage(-5));
+    }
+
+    private static void runBattleAction(Runnable action) {
+        try {
+            action.run();
+        } catch (IllegalArgumentException | IllegalStateException exception) {
+            System.out.println("Error: " + exception.getMessage());
         }
     }
 }
